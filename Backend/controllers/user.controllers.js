@@ -6,13 +6,17 @@ const createUser=async(req, res)=>{
 
     try{
         const {name, phone, position, salary}= req.body;
+        const user=await User.findOne({phone});
+        
         const newUser = new User({
             name,
             phone,
             position,
             salary
         });
-
+        if(user){
+            return res.status(400).json({success: false, message:"User already exist"})
+        }
         await newUser.save();
         res.status(200).json({success: true, message: "User created successfully"});
     }
@@ -34,7 +38,7 @@ const getUser=async(req, res)=>{
         if(!viewUser){
             res.status(404).json({success: true, message: "User not found"});
         }
-        res.status(200).json({success: true, message: "User found"})
+        res.status(200).json({success: true, message: "User found",users: viewUser})
 
     }
 
