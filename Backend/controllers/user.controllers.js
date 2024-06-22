@@ -51,8 +51,11 @@ const getUser=async(req, res)=>{
 // update user
 const updateUser=async(req, res)=>{
     try {
-        const userId=req.params.id;
-        const updateduser=await User.findByIdAndUpdate(userId, req.body, {new:true});
+        const {userPhone}=req.params.phone;
+        const updateduser = await User.findOneAndUpdate({userPhone}, req.body, {
+            new: true,
+            runValidators: true
+        });
     
         if(!updateduser){
             res.status(404).json({success: false, message: "User not found"});
@@ -61,15 +64,16 @@ const updateUser=async(req, res)=>{
     } 
     catch (error) {
         console.log("Error: ",error);
-        res.status(500).json({success: true, message: "Internal server error"});
+        res.status(500).json({success: false, message: "Internal server error"});
     }
 }
 
 // delete user
 const deleteUser=async(req, res)=>{
     try {
-        const userId=req.params.id;
-        const deleteduser= await User.findByIdAndDelete(userId);
+        // const {phone}=req.params;
+        const {userPhone}=req.params.phone;
+        const deleteduser= await User.findOneAndDelete({userPhone});
 
         if(!deleteduser){
             return res.status(404).json({success: false, message: "User not found"})
@@ -79,7 +83,7 @@ const deleteUser=async(req, res)=>{
     catch (error) {
          console.log("Error: ", error);
          res.status(500).json({
-             success: true,
+             success: false,
              message: "Internal server error"
          });
     }

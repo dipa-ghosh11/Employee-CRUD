@@ -5,8 +5,8 @@ const router=express.Router();
 
 router.post('/createuser', createUser);
 router.get('/getuser', getUser);
-router.put('/updateuser/:id', updateUser);
-router.delete('/deleteuser/:id',deleteUser )
+router.put('/updateuser/:phone', updateUser);
+router.delete('/deleteuser/:phone',deleteUser )
 
 
 export default router;
